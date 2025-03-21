@@ -1,120 +1,102 @@
-//import { Input } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
-import UserInput from "./components/ui/UserInput";
+// import { ChakraProvider, Box, Text, Input, Button, VStack } from "@chakra-ui/react";
+// import { extendTheme } from '@chakra-ui/react'
 
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
+import { Provider } from "./components/ui/provider"
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { Box, Text, Input, Button, VStack } from "@chakra-ui/react";
+import {useState} from "react";
 
 function App() {
-  const [userInput, setUserInput] = useState({
-    fullname: "",
-    email: "",
-    password: "",
-    phone: "",
-    address: ""
-  });
 
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    setUserInput(values => ({ ...values, [name]: value }));
-  }
+    const [userInput, setUserInput] = useState({
+        fullname: "",
+        email: "",
+        password: "",
+        phone: "",
+        address: ""
+    });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(userInput); // Để kiểm tra dữ liệu khi submit
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setUserInput(values => ({ ...values, [name]: value }));
+    }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(userInput);
+        fetch('http://localhost:8080/create',
+            {
+                method: "POST", headers: { "Content-Type": "application/json", },
+                body: JSON.stringify({
+                    fullname: userInput.fullname,
+                    email: userInput.email,
+                    password: userInput.password,
+                    phone: userInput.phone,
+                    address: userInput.address
+                })
+            }
+        )
+            .then(response => response.json())
+            .then(data => setUserInput(data))
+            .catch(error => console.error('Error fetching users:', error));
+    }
 
+    return (
+        <Provider>
+            <Box maxW="500px" mx="auto" mt={10} p={5} boxShadow="md" borderRadius="lg">
+                <form onSubmit={handleSubmit}>
+                    <VStack spacing={4} align="stretch">
+                        <Box>
+                            <Text mb={1}>FullName</Text>
+                            <Input name = 'fullname'
+                                   placeholder="Your FullName"
+                                   value={userInput.name}
+                                   onChange={handleChange} />
+                        </Box>
 
-    fetch('http://localhost:8080/create',
-      {
-        method: "POST", headers: { "Content-Type": "application/json", },
-        body: JSON.stringify({
-          fullname: userInput.fullname,
-          email: userInput.email,
-          password: userInput.password,
-          phone: userInput.phone,
-          address: userInput.address
-        })
-      }
-    )
-      .then(response => response.json())
-      .then(data => setUserInput(data))
-      .catch(error => console.error('Error fetching users:', error));
-  }
+                        <Box>
+                            <Text mb={1}>Email</Text>
+                            <Input type="email" name = 'email'
+                                   placeholder="Enter Email"
+                                   value={userInput.email}
+                                   onChange={handleChange} />
+                        </Box>
 
-  return (
-    <>
+                        <Box>
+                            <Text mb={1}>Password</Text>
+                            <Input type="password"
+                                   name = 'password'
+                                   value={userInput.password}
+                                   onChange={handleChange}
+                                   placeholder="Password" />
+                        </Box>
 
+                        <Box>
+                            <Text mb={1}>Phone Number</Text>
+                            <Input
+                                type="number"
+                                name = 'phone'
+                                value={userInput.phone}
+                                onChange={handleChange}
+                                placeholder="Your Phone number" />
+                        </Box>
 
-      <Container className="mt-5">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formGridFullName">
-            <Form.Label>FullName</Form.Label>
-            <Form.Control
-              name='fullname'
-              placeholder="Your FullName"
-              value={userInput.name} onChange={handleChange}
-            />
-          </Form.Group>
+                        <Box>
+                            <Text mb={1}>Address</Text>
+                            <Input
+                                name = 'address'
+                                value={userInput.address}
+                                onChange={handleChange}
+                                placeholder="1234 Main St" />
+                        </Box>
 
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGridEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                name='email'
-                type="email"
-                placeholder="Enter email"
-                value={userInput.email} onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                name='password'
-                type="password"
-                placeholder="Password"
-                value={userInput.password} onChange={handleChange}
-              />
-            </Form.Group>
-          </Row>
-
-
-          <Form.Group className="mb-3" controlId="formGridPhone">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control
-              name='phone'
-              placeholder="Your Phone numer"
-              value={userInput.phone} onChange={handleChange}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formGridAddress">
-            <Form.Label>Address</Form.Label>
-            <Form.Control
-              name='address'
-              placeholder="1234 Main St"
-              type='phone'
-              value={userInput.address} onChange={handleChange}
-            />
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-      </Container>
-
-    </>
-  );
+                        <Button type="submit" colorScheme="blue" width="full">Submit</Button>
+                    </VStack>
+                </form>
+            </Box>
+        </Provider>
+    );
 }
-
 
 export default App;
