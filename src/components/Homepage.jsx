@@ -1,45 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Container, Row, Col, Nav, Card } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {
-    HouseFill,
-    Box,
-    PersonFill,
-    BagFill,
-    GearFill
-} from 'react-bootstrap-icons';
+
 
 export function Homepage() {
     return (
         <>
-            <Container fluid className="p-0 vh-100 d-flex">
-                {/* Sidebar */}
-                <Col xs={2} className="bg-gradient p-0"
-                     style={{
-                         background: 'linear-gradient(to bottom, #4CAF50, #45a049)',
-                         minHeight: '100vh'
-                     }}
-                >
-                    <div className="p-3 text-center text-black">
-                        <h3>ShopMe</h3>
-                    </div>
-                    <Nav className="flex-column">
-
-
-
-                        <Nav.Link className="text-black py-2 px-3" to="/admin/home">
-                            <HouseFill className="me-2" /> Home
-                        </Nav.Link>
-                        <Nav.Link className="text-black py-2 px-3" to="/admin/useer">
-                            <Box className="me-2" /> User
-                        </Nav.Link>
-
-
-                    </Nav>
-                </Col>
-
+            <Container fluid className="p-0 vh-100 d-flex  ">
                 {/* Main Content */}
-                <Col xs={10} className="bg-light p-4">
+                <Col className="bg-light p-4">
                     {/* Header */}
                     <Row className="mb-4 align-items-center">
                         <Col>
