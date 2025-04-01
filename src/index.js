@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import CreateUser from './components/CreateUser';
+import CreateUser from './components/admin/CreateUser';
 import { ChakraProvider } from '@chakra-ui/react'
 import App from "./App";
 import {BrowserRouter} from "react-router-dom";

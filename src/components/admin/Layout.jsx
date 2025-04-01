@@ -1,11 +1,16 @@
 import {Col, Container} from "react-bootstrap";
 import {Sidebar} from "./Sidebar";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useParams} from "react-router-dom";
 import {Homepage} from "./Homepage";
 import {User} from "./User";
 import React from "react";
+import {UserDetail} from "./UserDetail";
+import CreateUser from "./CreateUser";
 
 export function Layout() {
+    const {userId} = Number(useParams());
+    console.log("User ID:", userId);
+
     return (
         <>
             <Container fluid className="p-0 vh-100 d-flex">
@@ -25,6 +30,8 @@ export function Layout() {
                     <Routes>
                         <Route path="/" element={<Homepage/>} />
                         <Route path="/admin/user/view" element={<User/>} />
+                        <Route path='/admin/user/detail/:userId' element={<UserDetail/>} />
+                        <Route path='/admin/user/create' element ={< CreateUser/>} />
                     </Routes>
                 </Col>
             </Container>
