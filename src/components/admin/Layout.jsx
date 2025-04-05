@@ -14,7 +14,7 @@ export function Layout() {
     return (
         <>
             <Container fluid className="p-0 vh-100 d-flex">
-                {/* Sidebar */}
+                {/* SideBar */}
                 <Col xs={2} className="bg-gradient p-0"
                      style={{
                          background: 'linear-gradient(to bottom, #4CAF50, #45a049)',

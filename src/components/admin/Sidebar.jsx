@@ -15,7 +15,7 @@ export function Sidebar() {
                     <HouseFill className="me-2" /> Home
                 </Nav.Link>
                 <Nav.Link as={Link} to="/admin/user/view" className="text-black py-2 px-3">
-                    <Box className="me-2" /> User
+                    <Box className="me-2" /> Customer
                 </Nav.Link>
             </Nav>
         </>
