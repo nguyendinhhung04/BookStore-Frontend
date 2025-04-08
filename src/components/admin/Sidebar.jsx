@@ -11,7 +11,7 @@ export function Sidebar() {
                 <h3>ShopMe</h3>
             </div>
             <Nav className="flex-column">
-                <Nav.Link as={Link} to="/" className="text-black py-2 px-3">
+                <Nav.Link as={Link} to="/admin" className="text-black py-2 px-3">
                     <HouseFill className="me-2" /> Home
                 </Nav.Link>
                 <Nav.Link as={Link} to="/admin/user/view" className="text-black py-2 px-3">
