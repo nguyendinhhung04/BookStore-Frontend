@@ -27,12 +27,6 @@ export function AdminLayout() {
 
                 {/* Main Content */}
                 <Col xs={10} className="bg-light p-4">
-                    {/*<Routes>*/}
-                    {/*    <Route path="/admin" element={<Homepage/>} />*/}
-                    {/*    <Route path="/admin/user/view" element={<User/>} />*/}
-                    {/*    <Route path='/admin/user/detail/:userId' element={<UserDetail/>} />*/}
-                    {/*    <Route path='/admin/user/create' element ={< CreateUser/>} />*/}
-                    {/*</Routes>*/}
                     <Outlet/>
                 </Col>
             </Container>

@@ -5,12 +5,17 @@ import {Homepage} from "./components/admin/Homepage";
 import {User} from "./components/admin/User";
 import {UserDetail} from "./components/admin/UserDetail";
 import CreateUser from "./components/admin/CreateUser";
+import {UserLayout} from "./components/client/UserLayout";
+import {Home} from "./components/client/Home";
 
 
 
 function App() {
     return (
         <Routes>
+            <Route path="/" element={<UserLayout/>}>
+                <Route index element={<Home/>}/>
+            </Route>
             <Route path="/admin/" element={<AdminLayout/>}>
                 <Route index element={<Homepage/>} />
                 <Route path="/admin/user/view" element={<User/>} />
