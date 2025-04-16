@@ -6,6 +6,8 @@ import {User} from "./components/admin/User";
 import {UserDetail} from "./components/admin/UserDetail";
 import CreateUser from "./components/admin/CreateUser";
 import CreateStaff from "./components/admin/CreateStaff";
+import StaffDetail from './components/admin/StaffDetail';
+import Staff from './components/admin/Staff';
 
 
 function App() {
@@ -16,6 +18,9 @@ function App() {
                 <Route path="/admin/user/view" element={<User/>} />
                 <Route path='/admin/user/detail/:userId' element={<UserDetail/>} />
                 <Route path='/admin/user/create' element ={< CreateUser/>} />
+                <Route path='/admin/Staff/view' element ={< Staff/>} />
+                <Route path='/admin/Staff/create' element ={< CreateStaff/>} />
+                <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
             </Route>
         </Routes>
     );

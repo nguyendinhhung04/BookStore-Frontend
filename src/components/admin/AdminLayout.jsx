@@ -31,17 +31,9 @@ export function AdminLayout() {
 
                 {/* Main Content */}
                 <Col xs={10} className="bg-light p-4">
-                    <Routes>
-                        <Route path="/" element={<Homepage />} />
-                        <Route path="/admin/user/view" element={<User />} />
-                        <Route path="/admin/user/detail/:userId" element={<UserDetail />} />
-                        <Route path="/admin/user/create" element={<CreateUser />} />
-                        <Route path="/admin/staff/view" element={<Staff />} />
-                        <Route path="/admin/staff/create" element={<CreateStaff />} />
-                        <Route path="/admin/staff/detail/:id" element={<StaffDetail />} />
-                    </Routes>
+
                     {/* Nếu muốn render route con thì dùng Outlet */}
-                    {/* <Outlet /> */}
+                    {<Outlet /> 
                 </Col>
             </Container>
         </>
