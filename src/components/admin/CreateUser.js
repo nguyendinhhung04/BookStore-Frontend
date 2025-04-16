@@ -68,6 +68,18 @@ import {Link} from "react-router-dom";
                         </Form.Select>
                     </Col>
                 </Row>
+                <Row className="mb-3">
+                    <Col>
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="Nhập email"
+                            name="email"
+                            value={staffInput.email}
+                            onChange={handleChanged}
+                        />
+                    </Col>
+                </Row>
 
                 <Row className="mb-3">
                     <Col>

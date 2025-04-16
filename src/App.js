@@ -5,7 +5,7 @@ import {Homepage} from "./components/admin/Homepage";
 import {User} from "./components/admin/User";
 import {UserDetail} from "./components/admin/UserDetail";
 import CreateUser from "./components/admin/CreateUser";
-
+import CreateStaff from "./components/admin/CreateStaff";
 
 
 function App() {
