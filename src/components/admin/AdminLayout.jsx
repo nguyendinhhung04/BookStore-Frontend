@@ -31,9 +31,7 @@ export function AdminLayout() {
 
                 {/* Main Content */}
                 <Col xs={10} className="bg-light p-4">
-
-                    {/* Nếu muốn render route con thì dùng Outlet */}
-                    {<Outlet /> 
+                    <Outlet />
                 </Col>
             </Container>
         </>
