@@ -29,11 +29,12 @@ export function AdminLayout() {
                     <Sidebar />
                 </Col>
 
+
                 {/* Main Content */}
                 <Col xs={10} className="bg-light p-4">
-                    <Outlet />
+                    <Outlet/>
                 </Col>
             </Container>
         </>
-    );
+    )
 }
