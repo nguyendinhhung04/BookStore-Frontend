@@ -75,7 +75,7 @@ import {Link} from "react-router-dom";
                             type="email"
                             placeholder="Nhập email"
                             name="email"
-                            value={staffInput.email}
+                            value={userInput.email}
                             onChange={handleChanged}
                         />
                     </Col>

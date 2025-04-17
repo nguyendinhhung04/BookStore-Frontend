@@ -20,7 +20,7 @@ export function Sidebar() {
                 <Nav.Link as={Link} to="/admin/staff/view" className="text-black py-2 px-3">
                     <Box className="me-2" /> Staff
                 </Nav.Link>
-                
+
             </Nav>
         </>
     )
