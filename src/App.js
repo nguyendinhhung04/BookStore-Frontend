@@ -10,6 +10,9 @@ import StaffDetail from './components/admin/StaffDetail';
 import Staff from './components/admin/Staff';
 import {UserLayout} from "./components/client/UserLayout";
 import {Home} from "./components/client/Home";
+import {Book} from "./components/admin/Book";
+import {ResourceManage} from "./components/admin/ResourceManage";
+import {Category} from "./components/admin/Category";
 
 function App() {
     return (
@@ -25,6 +28,10 @@ function App() {
                 <Route path='/admin/Staff/view' element ={< Staff/>} />
                 <Route path='/admin/Staff/create' element ={< CreateStaff/>} />
                 <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
+
+                <Route path='/admin/resource/' element={< ResourceManage/>}>
+
+                </Route>
             </Route>
         </Routes>
     );

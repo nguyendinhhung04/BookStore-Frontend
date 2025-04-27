@@ -19,11 +19,12 @@ export function AdminLayout() {
             <Container fluid className="p-0 vh-100 d-flex">
                 {/* SideBar */}
                 <Col
-                    xs={2}
+
                     className="bg-gradient p-0"
                     style={{
                         background: 'linear-gradient(to bottom, #4CAF50, #45a049)',
-                        minHeight: '100vh'
+                        minHeight: '100vh',
+                        maxWidth: "180px"
                     }}
                 >
                     <Sidebar />
@@ -31,7 +32,7 @@ export function AdminLayout() {
 
 
                 {/* Main Content */}
-                <Col xs={10} className="bg-light p-4">
+                <Col  className="bg-light p-0">
                     <Outlet/>
                 </Col>
             </Container>
