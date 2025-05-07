@@ -12,13 +12,13 @@ import {Link} from "react-router-dom";
     const [imageSrc, setImageSrc] = useState("https://icons.veryicon.com/png/o/miscellaneous/standard/avatar-15.png");
     const [userInput, setUserInput] = useState({
         fullname: "",
-        email: "",
-        username: "",
-        password: "",
-        age:0,
-        gender:"",
+        age: "",
+        gender: "",
+        address: "",
+        email:0,
+        password:"",
         phone: "",
-        address: ""
+        username: ""
     });
 
     const handleImageClick = () => {
@@ -33,7 +33,7 @@ import {Link} from "react-router-dom";
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-        setInputImg(file);
+        setInputImg(file); //use useState để lưu ảnh để gửi cho backend riêng với useState ảnh hiển thị  để tránh việc gửi bằng reader.result sẽ khiến request quá kích thước
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
@@ -44,16 +44,23 @@ import {Link} from "react-router-dom";
     };
 
     const handleSubmited = (event) => {
-        axios.post("http://localhost:8080/user/create", userInput)
-            .then(function (response) {console.log(response)})
-            .catch(error => {console.log(error)})
-
+        event.preventDefault();
         const formData = new FormData();
-        formData.append("inputImg",inputImg);
-        console.log(formData);
-        axios.post("http://localhost:8080/user/uploadImg",formData)
-            .then(function (response) {console.log(response)})
-            .catch(error => {console.log(error)})
+        formData.append("inputImg", inputImg);
+        formData.append("userInput", new Blob(
+            [JSON.stringify(userInput)],
+            { type: "application/json" }
+        ));
+
+        console.log("inputImg instanceof File:", inputImg instanceof File);
+
+        axios.post("http://localhost:8080/user/create", formData,{
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        })
+            .then((response) => {console.log(response.data)})
+            .catch((error) => {console.log(error)})
     }
 
     return (
@@ -200,7 +207,7 @@ import {Link} from "react-router-dom";
                         className="btn-primary me-2"
                         variant="primary"
                         onClick={handleSubmited}
-                        as={Link} to='/admin/user/view'
+                        //as={Link} to='/admin/user/view'
                     >Save</Button>
                 </div>
             </Form>
