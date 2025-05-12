@@ -14,6 +14,7 @@ export function UserDetail() {
     const params = useParams();
     const discardData = useRef(null);
     const navigate = useNavigate();
+    const [imgSrc, setImgSrc] = React.useState("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
 
     AlertConfirm.config({
         maskClosable: true,
@@ -21,6 +22,8 @@ export function UserDetail() {
             console.log("close");
         },
     });
+
+
 
     const [user,setUser] = React.useState( {
         id : params.userId,
@@ -58,9 +61,14 @@ export function UserDetail() {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/admin/user/detail/${params.userId}`)
-            .then(response => { setUser(response.data); discardData.current = response.data; })
+            .then(response => {
+
+                console.log(response.data);
+
+                setImgSrc(`data:${response.data.imageType};base64,${response.data.data }`)
+            })
             .catch(error => console.error("Error fetching data:", error));
-    }, []);
+    }, [params.userId]);
 
 
 
@@ -85,9 +93,14 @@ export function UserDetail() {
             <Row className="text-center mb-3">
                 <Col>
                     <Image
-                        src="https://via.placeholder.com/100"
+                        src={imgSrc}
                         roundedCircle
                         className="border"
+                        style={{
+                            width : "150px",
+                            height : "150px",
+                            borderRadius: "50%",
+                        }}
                     />
                     <h5 className="mt-2">Email: {user.email}</h5>
                     <p>ID: {params.userId}</p>

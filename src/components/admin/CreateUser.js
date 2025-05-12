@@ -207,7 +207,7 @@ import {Link} from "react-router-dom";
                         className="btn-primary me-2"
                         variant="primary"
                         onClick={handleSubmited}
-                        //as={Link} to='/admin/user/view'
+                        as={Link} to='/admin/user/view'
                     >Save</Button>
                 </div>
             </Form>
