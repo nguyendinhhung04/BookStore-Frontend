@@ -10,11 +10,15 @@ import "react-alert-confirm/lib/style.css";
 
 export function UserDetail() {
     const [enabledModify, setEnabledModify] = React.useState(false);
+    const [hovered, setHovered] = useState(false);
     const [Alertvisible, setAlertVisible] = useState(false);
     const params = useParams();
     const discardData = useRef(null);
     const navigate = useNavigate();
     const [imgSrc, setImgSrc] = React.useState("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
+    const fileInputRef = useRef(null);
+    const [inputImg, setInputImg] = React.useState(null);
+    const discardImageRef = useRef(null);
 
     AlertConfirm.config({
         maskClosable: true,
@@ -23,11 +27,16 @@ export function UserDetail() {
         },
     });
 
-
+    const handleImageClick = () => {
+        if (enabledModify){
+            fileInputRef.current.click();
+        }
+    };
 
     const [user,setUser] = React.useState( {
         id : params.userId,
         email: "",
+        username: "",
         password: "",
         fullname: "",
         age: -1,
@@ -42,14 +51,25 @@ export function UserDetail() {
     }
 
     const handleSubmited = (event) => {
-        axios.post("http://localhost:8080/user/create", user)
-            .then(function (response) {discardData.current = user;setEnabledModify(false);})
+        const formData = new FormData();
+        formData.append("imgData", inputImg);
+        formData.append("userData", new Blob(
+            [JSON.stringify(user)],
+            { type: "application/json" }
+        ));
+        axios.post("http://localhost:8080/user/edit", formData)
+            .then(function (response) {
+                discardData.current = user;
+                discardImageRef.current = imgSrc;
+                setEnabledModify(false);
+            })
             .catch(error => {console.log(error)});
 
     }
 
     const handleDiscarded = (event) => {
         setUser(discardData.current);
+        setImgSrc(discardImageRef.current);
         setEnabledModify(false);
     }
 
@@ -59,6 +79,18 @@ export function UserDetail() {
             .catch(error => {console.log(error)});
     }
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setInputImg(file); //use useState để lưu ảnh để gửi cho backend riêng với useState ảnh hiển thị  để tránh việc gửi bằng reader.result sẽ khiến request quá kích thước
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setImgSrc(reader.result); // hiển thị ảnh mới
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     useEffect(() => {
         axios.get(`http://localhost:8080/admin/user/detail/${params.userId}`)
             .then(response => {
@@ -66,6 +98,20 @@ export function UserDetail() {
                 console.log(response.data);
 
                 setImgSrc(`data:${response.data.imageType};base64,${response.data.data }`)
+
+                setUser({
+                    id : params.userId,
+                    username: response.data.username,
+                    email: response.data.email,
+                    password: response.data.password,
+                    fullname: response.data.fullname,
+                    age: response.data.age,
+                    gender : response.data.gender,
+                    phone:response.data.phone,
+                    address: response.data.address,
+                })
+                discardData.current = user;
+                discardImageRef.current = imgSrc;
             })
             .catch(error => console.error("Error fetching data:", error));
     }, [params.userId]);
@@ -100,7 +146,20 @@ export function UserDetail() {
                             width : "150px",
                             height : "150px",
                             borderRadius: "50%",
+                            transform: hovered ? 'scale(1.1)' : 'scale(1)',
+                            transition: 'transform 0.3s ease',
+                            cursor: 'pointer'
                         }}
+                        onMouseEnter={() => setHovered(true && enabledModify)}
+                        onMouseLeave={() => setHovered(false && enabledModify)}
+                        onClick={handleImageClick}
+                    />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
                     />
                     <h5 className="mt-2">Email: {user.email}</h5>
                     <p>ID: {params.userId}</p>
@@ -108,6 +167,32 @@ export function UserDetail() {
             </Row>
 
             <Form >
+
+                <Row>
+                    <Col>
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập username"
+                            disabled={true}
+                            name = "username"
+                            value = {user.username}
+                        />
+                    </Col>
+
+                    <Col>
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Nhập username"
+                            disabled={!enabledModify}
+                            name = "fullname"
+                            value = {user.password}
+                            onChange={handleChanged}
+                        />
+                    </Col>
+                </Row>
+
                 <Row className="mb-3">
                     <Col>
                         <Form.Label>Họ và tên</Form.Label>

@@ -30,7 +30,7 @@ function App() {
                 <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
 
                 <Route path='/admin/resource/' element={< ResourceManage/>}>
-
+                    <Route index element={<Book/>}/>
                 </Route>
             </Route>
         </Routes>

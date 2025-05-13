@@ -2,16 +2,23 @@ import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import { Book } from "./Book"
 import {Category} from "./Category";
+import {Outlet, useNavigate} from "react-router-dom";
 
 export function ResourceManage() {
+    const navigate = useNavigate();
     const [state, setState] = useState(0);
-
+    const menuItems = ["Book", "Category", "Author", "Publisher"];
+    const menuURL = [
+        "/admin/resource/",
+        "/admin/resource/category/",
+        "/admin/resource/author/",
+        "/admin/resource/publisher/"
+    ];
     const handleClick = (slot) => {
         console.log(slot);
         setState(slot);
+        navigate(menuURL[slot])
     };
-
-    const menuItems = ["Book", "Category", "Author", "Publisher"];
 
     return (
         <Container fluid>
@@ -45,7 +52,7 @@ export function ResourceManage() {
                 ))}
             </Row>
             <Row>
-                {state === 0 ? (<Book/>) : <Category/>}
+                <Outlet/>
             </Row>
         </Container>
 
