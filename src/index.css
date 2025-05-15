@@ -12,3 +12,34 @@ code {
     monospace;
 }
 
+/* Mega dropdown menu - ẩn mặc định */
+.mega-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%; /* chiếm full ngang phần chứa */
+  background-color: white;
+  padding: 20px 40px;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+  display: none; /* ẩn khi chưa hover */
+  z-index: 1000;
+}
+
+/* Khi hover vào phần chứa .nav-category thì hiện mega dropdown */
+.nav-category:hover .mega-dropdown {
+  display: flex; /* hiện ra, dạng flex để dễ chia cột */
+}
+
+/* Mỗi cột trong dropdown */
+.mega-column {
+  flex: 1; /* chia đều */
+  margin-right: 30px;
+}
+
+/* Tiêu đề từng cột */
+.mega-column h6 {
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
