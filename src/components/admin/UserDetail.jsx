@@ -7,6 +7,8 @@ import axios from "axios";
 
 import AlertConfirm from "react-alert-confirm";
 import "react-alert-confirm/lib/style.css";
+import {useSelector} from "react-redux";
+
 
 export function UserDetail() {
     const [enabledModify, setEnabledModify] = React.useState(false);
@@ -19,6 +21,7 @@ export function UserDetail() {
     const fileInputRef = useRef(null);
     const [inputImg, setInputImg] = React.useState(null);
     const discardImageRef = useRef(null);
+    const role = useSelector((state) => state.auth.role);
 
     AlertConfirm.config({
         maskClosable: true,
@@ -117,7 +120,13 @@ export function UserDetail() {
     }, [params.userId]);
 
 
-
+    if( role !== "ROLE_ADMIN") {
+        return (
+            <div className="text-center mt-5">
+                <h3 className="text-danger">You do not have permission to access this page.</h3>
+            </div>
+        );
+    }
 
     return (
         <Container className="mt-4 p-4 border rounded shadow-lg bg-white" style={{ maxWidth: "600px" }}>

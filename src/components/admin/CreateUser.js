@@ -2,7 +2,8 @@ import React from 'react';
 import {useState, useRef} from "react";
 import {Col, Container, Form, Image, Row,Button} from "react-bootstrap";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
  function CreateUser()
 {
@@ -20,6 +21,10 @@ import {Link} from "react-router-dom";
         phone: "",
         username: ""
     });
+    const role = useSelector((state) => state.auth.role);
+    const token = useSelector((state) => state.auth.token);
+    const navigate = useNavigate();
+
 
     const handleImageClick = () => {
         fileInputRef.current.click();
@@ -56,11 +61,20 @@ import {Link} from "react-router-dom";
 
         axios.post("http://localhost:8080/user/create", formData,{
             headers: {
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "multipart/form-data"
             }
         })
-            .then((response) => {console.log(response.data)})
+            .then((response) => {console.log(response.data); navigate('/admin/user/view'); })
             .catch((error) => {console.log(error)})
+    }
+
+    if( role !== "ROLE_ADMIN") {
+        return (
+            <div className="text-center mt-5">
+                <h3 className="text-danger">You do not have permission to access this page.</h3>
+            </div>
+        );
     }
 
     return (

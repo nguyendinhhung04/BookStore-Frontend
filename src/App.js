@@ -12,28 +12,40 @@ import {UserLayout} from "./components/client/UserLayout";
 import {Home} from "./components/client/Home";
 import {Book} from "./components/admin/Book";
 import {ResourceManage} from "./components/admin/ResourceManage";
-import {Category} from "./components/admin/Category";
+import {Login} from "./components/admin/Login";
+import {PrivateRoute} from "./components/admin/PrivateRoute";
+import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 
 function App() {
     return (
-        <Routes>
-            <Route path="/" element={<UserLayout/>}>
-                <Route index element={<Home/>}/>
-            </Route>
-            <Route path="/admin/" element={<AdminLayout/>}>
-                <Route index element={<Homepage/>} />
-                <Route path="/admin/user/view" element={<User/>} />
-                <Route path='/admin/user/detail/:userId' element={<UserDetail/>} />
-                <Route path='/admin/user/create' element ={< CreateUser/>} />
-                <Route path='/admin/Staff/view' element ={< Staff/>} />
-                <Route path='/admin/Staff/create' element ={< CreateStaff/>} />
-                <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
-
-                <Route path='/admin/resource/' element={< ResourceManage/>}>
-                    <Route index element={<Book/>}/>
+       // <AuthProvider>
+       //  <PrimeReactProvider>
+            <Routes>
+                <Route path="/" element={<UserLayout/>}>
+                    <Route index element={<Home/>}/>
                 </Route>
-            </Route>
-        </Routes>
+                <Route path="/admin/login" element={<Login/>} />
+                <Route path="/admin/" element={
+                    <PrivateRoute>
+                        <AdminLayout/>
+                    </PrivateRoute>
+                }>
+                    <Route index element={<Homepage/>} />
+                    <Route path="/admin/user/view" element={<User/>} />
+                    <Route path='/admin/user/detail/:userId' element={<UserDetail/>} />
+                    <Route path='/admin/user/create' element ={< CreateUser/>} />
+                    <Route path='/admin/Staff/view' element ={< Staff/>} />
+                    <Route path='/admin/Staff/create' element ={< CreateStaff/>} />
+                    <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
+
+
+                    <Route path='/admin/resource/' element={< ResourceManage/>}>
+                        <Route index element={<Book/>}/>
+                    </Route>
+                </Route>
+            </Routes>
+        // </PrimeReactProvider>
+       // </AuthProvider>
     );
 }
 

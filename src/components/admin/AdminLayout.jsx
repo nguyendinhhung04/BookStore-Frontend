@@ -1,6 +1,6 @@
 import { Col, Container } from "react-bootstrap";
 import { Sidebar } from "./Sidebar";
-import { Outlet, Route, Routes, useParams } from "react-router-dom";
+import {Navigate, Outlet, Route, Routes, useParams} from "react-router-dom";
 import { Homepage } from "./Homepage";
 import { User } from "./User";
 import React from "react";
@@ -10,9 +10,11 @@ import { Staff } from "./Staff";
 import { CreateStaff } from "./CreateStaff";
 import { StaffDetail } from "./StaffDetail";
 
+
 export function AdminLayout() {
     const { userId } = useParams(); // Không cần Number() ở đây
     console.log("User ID:", userId);
+
 
     return (
         <>

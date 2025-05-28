@@ -7,6 +7,7 @@ import axios from "axios";
 
 import AlertConfirm from "react-alert-confirm";
 import "react-alert-confirm/lib/style.css";
+import {useSelector} from "react-redux";
 
 function StaffDetail() {
     const [enabledModify, setEnabledModify] = useState(false);
@@ -14,6 +15,8 @@ function StaffDetail() {
     const params = useParams();
     const discardData = useRef(null);
     const navigate = useNavigate();
+    const role = useSelector((state) => state.auth.role);
+
 
     AlertConfirm.config({
         maskClosable: true,
@@ -66,6 +69,14 @@ function StaffDetail() {
             })
             .catch(error => console.error("Error fetching data:", error));
     }, []);
+
+    if( role !== "ROLE_ADMIN") {
+        return (
+            <div className="text-center mt-5">
+                <h3 className="text-danger">You do not have permission to access this page.</h3>
+            </div>
+        );
+    }
 
     return (
         <Container className="mt-4 p-4 border rounded shadow-lg bg-white" style={{ maxWidth: "600px" }}>

@@ -3,11 +3,14 @@ import { useState } from "react";
 import { Book } from "./Book"
 import {Category} from "./Category";
 import {Outlet, useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 export function ResourceManage() {
     const navigate = useNavigate();
     const [state, setState] = useState(0);
     const menuItems = ["Book", "Category", "Author", "Publisher"];
+    const role = useSelector((state) => state.auth.role);
+
     const menuURL = [
         "/admin/resource/",
         "/admin/resource/category/",
@@ -19,6 +22,14 @@ export function ResourceManage() {
         setState(slot);
         navigate(menuURL[slot])
     };
+
+    if( role !== "ROLE_STORE_MANAGER") {
+        return (
+            <div className="text-center mt-5">
+                <h3 className="text-danger">You do not have permission to access this page.</h3>
+            </div>
+        );
+    }
 
     return (
         <Container fluid>

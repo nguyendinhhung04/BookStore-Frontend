@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Col, Container, Form, Row, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import {useSelector} from "react-redux";
 
 function CreateStaff() {
     const [staffInput, setStaffInput] = useState({
@@ -13,6 +14,8 @@ function CreateStaff() {
         phone: "",
         address: ""
     });
+    const role = useSelector((state) => state.auth.role);
+
 
     const handleChanged = (event) => {
         const name = event.target.name;
@@ -28,6 +31,14 @@ function CreateStaff() {
             .catch(error => {
                 console.log(error);
             });
+    }
+
+    if( role !== "ROLE_ADMIN") {
+        return (
+            <div className="text-center mt-5">
+                <h3 className="text-danger">You do not have permission to access this page.</h3>
+            </div>
+        );
     }
 
     return (
