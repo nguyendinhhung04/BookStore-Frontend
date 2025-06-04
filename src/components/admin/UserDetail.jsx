@@ -60,14 +60,13 @@ export function UserDetail() {
             [JSON.stringify(user)],
             { type: "application/json" }
         ));
-        axios.post("http://localhost:8080/user/edit", formData)
+        axios.post("http://localhost:8080/customer/edit", formData)
             .then(function (response) {
                 discardData.current = user;
                 discardImageRef.current = imgSrc;
                 setEnabledModify(false);
             })
             .catch(error => {console.log(error)});
-
     }
 
     const handleDiscarded = (event) => {
@@ -77,7 +76,7 @@ export function UserDetail() {
     }
 
     const handleDelete = (event) => {
-        axios.post(`http://localhost:8080/admin/user/delete/${user.id}`)
+        axios.post(`http://localhost:8080/admin/customer/delete/${user.id}`)
             .then(response => {navigate("/admin/user/view/")})
             .catch(error => {console.log(error)});
     }
@@ -95,7 +94,7 @@ export function UserDetail() {
     };
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/admin/user/detail/${params.userId}`)
+        axios.get(`http://localhost:8080/admin/customer/detail/${params.userId}`)
             .then(response => {
 
                 console.log(response.data);
@@ -145,35 +144,35 @@ export function UserDetail() {
                 onCancel={() => setAlertVisible(false)}
             />
 
-            <Row className="text-center mb-3">
-                <Col>
-                    <Image
-                        src={imgSrc}
-                        roundedCircle
-                        className="border"
-                        style={{
-                            width : "150px",
-                            height : "150px",
-                            borderRadius: "50%",
-                            transform: hovered ? 'scale(1.1)' : 'scale(1)',
-                            transition: 'transform 0.3s ease',
-                            cursor: 'pointer'
-                        }}
-                        onMouseEnter={() => setHovered(true && enabledModify)}
-                        onMouseLeave={() => setHovered(false && enabledModify)}
-                        onClick={handleImageClick}
-                    />
-                    <input
-                        type="file"
-                        accept="image/*"
-                        ref={fileInputRef}
-                        style={{ display: 'none' }}
-                        onChange={handleFileChange}
-                    />
-                    <h5 className="mt-2">Email: {user.email}</h5>
-                    <p>ID: {params.userId}</p>
-                </Col>
-            </Row>
+            {/*<Row className="text-center mb-3">*/}
+            {/*    <Col>*/}
+            {/*        <Image*/}
+            {/*            src={imgSrc}*/}
+            {/*            roundedCircle*/}
+            {/*            className="border"*/}
+            {/*            style={{*/}
+            {/*                width : "150px",*/}
+            {/*                height : "150px",*/}
+            {/*                borderRadius: "50%",*/}
+            {/*                transform: hovered ? 'scale(1.1)' : 'scale(1)',*/}
+            {/*                transition: 'transform 0.3s ease',*/}
+            {/*                cursor: 'pointer'*/}
+            {/*            }}*/}
+            {/*            onMouseEnter={() => setHovered(true && enabledModify)}*/}
+            {/*            onMouseLeave={() => setHovered(false && enabledModify)}*/}
+            {/*            onClick={handleImageClick}*/}
+            {/*        />*/}
+            {/*        <input*/}
+            {/*            type="file"*/}
+            {/*            accept="image/*"*/}
+            {/*            ref={fileInputRef}*/}
+            {/*            style={{ display: 'none' }}*/}
+            {/*            onChange={handleFileChange}*/}
+            {/*        />*/}
+            {/*        <h5 className="mt-2">Email: {user.email}</h5>*/}
+            {/*        <p>ID: {params.userId}</p>*/}
+            {/*    </Col>*/}
+            {/*</Row>*/}
 
             <Form >
 

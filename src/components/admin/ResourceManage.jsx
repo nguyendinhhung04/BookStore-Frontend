@@ -8,12 +8,11 @@ import {useSelector} from "react-redux";
 export function ResourceManage() {
     const navigate = useNavigate();
     const [state, setState] = useState(0);
-    const menuItems = ["Book", "Category", "Author", "Publisher"];
+    const menuItems = ["Book", "Author", "Publisher"];
     const role = useSelector((state) => state.auth.role);
 
     const menuURL = [
         "/admin/resource/",
-        "/admin/resource/category/",
         "/admin/resource/author/",
         "/admin/resource/publisher/"
     ];

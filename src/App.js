@@ -15,6 +15,14 @@ import {ResourceManage} from "./components/admin/ResourceManage";
 import {Login} from "./components/admin/Login";
 import {PrivateRoute} from "./components/admin/PrivateRoute";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+import {Author} from "./components/admin/Author";
+import {Publisher} from "./components/admin/Publisher";
+import {CashierHome} from "./components/admin/Cashier/CashierHome";
+import {CreatePayment} from "./components/admin/Cashier/CreatePayment";
+import {SearchBill} from "./components/admin/Cashier/SearchBill";
+import {DetailBill} from "./components/admin/Cashier/DetailBill";
+import {BookDetail} from "./components/admin/Book/BookDetail";
+import {AuthorDetail} from "./components/admin/Author/AuthorDetail";
 
 function App() {
     return (
@@ -31,9 +39,9 @@ function App() {
                     </PrivateRoute>
                 }>
                     <Route index element={<Homepage/>} />
-                    <Route path="/admin/user/view" element={<User/>} />
-                    <Route path='/admin/user/detail/:userId' element={<UserDetail/>} />
-                    <Route path='/admin/user/create' element ={< CreateUser/>} />
+                    <Route path="/admin/customer/view" element={<User/>} />
+                    <Route path='/admin/customer/detail/:userId' element={<UserDetail/>} />
+                    <Route path='/admin/customer/create' element ={< CreateUser/>} />
                     <Route path='/admin/Staff/view' element ={< Staff/>} />
                     <Route path='/admin/Staff/create' element ={< CreateStaff/>} />
                     <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
@@ -41,7 +49,15 @@ function App() {
 
                     <Route path='/admin/resource/' element={< ResourceManage/>}>
                         <Route index element={<Book/>}/>
+                        <Route path = '/admin/resource/book/:id' element={<BookDetail/>}/>
+                        <Route path="/admin/resource/author" element={<Author/>}/>
+                        <Route path="/admin/resource/publisher" element={<Publisher/>}/>
+                        
                     </Route>
+                    <Route path = "/admin/cashier" element={<CashierHome/>} />
+                    <Route path = "/admin/cashier/create/:id" element={<CreatePayment/>} />
+                    <Route path = "/admin/cashier/searchBill" element={<SearchBill/>} />
+                    <Route path="/admin/cashier/bill" element={<DetailBill/>}/>
                 </Route>
             </Routes>
         // </PrimeReactProvider>

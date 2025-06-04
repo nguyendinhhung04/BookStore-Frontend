@@ -69,7 +69,7 @@ import {useSelector} from "react-redux";
             .catch((error) => {console.log(error)})
     }
 
-    if( role !== "ROLE_ADMIN") {
+    if( role !== "ROLE_ADMIN" && role !== "ROLE_CASHIER" ) {
         return (
             <div className="text-center mt-5">
                 <h3 className="text-danger">You do not have permission to access this page.</h3>
@@ -85,53 +85,53 @@ import {useSelector} from "react-redux";
                     <Col>
                         <Row>
 
-                            <Col>
-                                <div>
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Nhập tên"
-                                        name = "username"
-                                        value = {userInput.username}
-                                        onChange={handleChanged}
-                                    />
+                            {/*<Col>*/}
+                            {/*    <div>*/}
+                            {/*        <Form.Label>Username</Form.Label>*/}
+                            {/*        <Form.Control*/}
+                            {/*            type="text"*/}
+                            {/*            placeholder="Nhập tên"*/}
+                            {/*            name = "username"*/}
+                            {/*            value = {userInput.username}*/}
+                            {/*            onChange={handleChanged}*/}
+                            {/*        />*/}
 
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Nhập tên"
-                                        name = "password"
-                                        value = {userInput.password}
-                                        onChange={handleChanged}
-                                    />
+                            {/*        <Form.Label>Password</Form.Label>*/}
+                            {/*        <Form.Control*/}
+                            {/*            type="text"*/}
+                            {/*            placeholder="Nhập tên"*/}
+                            {/*            name = "password"*/}
+                            {/*            value = {userInput.password}*/}
+                            {/*            onChange={handleChanged}*/}
+                            {/*        />*/}
 
-                                </div>
-                            </Col>
+                            {/*    </div>*/}
+                            {/*</Col>*/}
 
-                            <Col style={{
-                                display: "flex",
-                                justifyContent: "center"
-                            }} >
-                                <img src={imageSrc}
-                                     style={{
-                                         width : "150px",
-                                         borderRadius: "50%",
-                                         transform: hovered ? 'scale(1.1)' : 'scale(1)',
-                                         transition: 'transform 0.3s ease',
-                                         cursor: 'pointer'
-                                    }}
-                                     onMouseEnter={() => setHovered(true)}
-                                     onMouseLeave={() => setHovered(false)}
-                                     onClick={handleImageClick}
-                                />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                    onChange={handleFileChange}
-                                />
-                            </Col>
+                            {/*<Col style={{*/}
+                            {/*    display: "flex",*/}
+                            {/*    justifyContent: "center"*/}
+                            {/*}} >*/}
+                            {/*    <img src={imageSrc}*/}
+                            {/*         style={{*/}
+                            {/*             width : "150px",*/}
+                            {/*             borderRadius: "50%",*/}
+                            {/*             transform: hovered ? 'scale(1.1)' : 'scale(1)',*/}
+                            {/*             transition: 'transform 0.3s ease',*/}
+                            {/*             cursor: 'pointer'*/}
+                            {/*        }}*/}
+                            {/*         onMouseEnter={() => setHovered(true)}*/}
+                            {/*         onMouseLeave={() => setHovered(false)}*/}
+                            {/*         onClick={handleImageClick}*/}
+                            {/*    />*/}
+                            {/*    <input*/}
+                            {/*        type="file"*/}
+                            {/*        accept="image/*"*/}
+                            {/*        ref={fileInputRef}*/}
+                            {/*        style={{ display: 'none' }}*/}
+                            {/*        onChange={handleFileChange}*/}
+                            {/*    />*/}
+                            {/*</Col>*/}
 
                         </Row>
                     </Col>

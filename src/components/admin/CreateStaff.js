@@ -8,6 +8,7 @@ function CreateStaff() {
     const [staffInput, setStaffInput] = useState({
         fullname: "",
         email: "",
+        username : "",
         password: "",
         age: 0,
         gender: "",
@@ -33,7 +34,7 @@ function CreateStaff() {
             });
     }
 
-    if( role !== "ROLE_ADMIN") {
+    if( role !== "ROLE_ADMIN" ) {
         return (
             <div className="text-center mt-5">
                 <h3 className="text-danger">You do not have permission to access this page.</h3>
@@ -92,6 +93,19 @@ function CreateStaff() {
                             placeholder="Nhập email"
                             name="email"
                             value={staffInput.email}
+                            onChange={handleChanged}
+                        />
+                    </Col>
+                </Row>
+
+                <Row className="mb-3">
+                    <Col>
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhập tên đăng nhập "
+                            name="username"
+                            value={staffInput.username}
                             onChange={handleChanged}
                         />
                     </Col>

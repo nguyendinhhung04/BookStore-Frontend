@@ -24,7 +24,7 @@ export function Sidebar() {
                         </Nav.Link>
 
                         {role === "ROLE_ADMIN" && (
-                            <Nav.Link as={Link} to="/admin/user/view" className="text-black py-2 px-3">
+                            <Nav.Link as={Link} to="/admin/customer/view" className="text-black py-2 px-3">
                                 <Box className="me-2" /> Customer
                             </Nav.Link>
                         )}
@@ -37,6 +37,11 @@ export function Sidebar() {
                         {role === "ROLE_STORE_MANAGER" && (
                             <Nav.Link as={Link} to="/admin/resource/" className="text-black py-2 px-3">
                                 <Box className="me-2" /> Resource Data
+                            </Nav.Link>
+                        )}
+                        {role === "ROLE_CASHIER" && (
+                            <Nav.Link as={Link} to="/admin/cashier/" className="text-black py-2 px-3">
+                                <Box className="me-2" /> Cashier
                             </Nav.Link>
                         )}
                     </Nav>
