@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Col, Container, Form, Row, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useSelector} from "react-redux";
 
 function CreateStaff() {
-    const [staffInput, setStaffInput] = useState({
+    const token = useSelector((state) => state.auth.token);
+    const [usernameValid, setUsernameValid] = useState(true);
+    const navigate = useNavigate();
+    const [staff, setStaff] = useState({
         fullname: "",
         email: "",
         username : "",
@@ -13,7 +16,7 @@ function CreateStaff() {
         age: 0,
         gender: "",
         phone: "",
-        address: ""
+        role : null
     });
     const role = useSelector((state) => state.auth.role);
 
@@ -21,13 +24,22 @@ function CreateStaff() {
     const handleChanged = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setStaffInput(values => ({ ...values, [name]: value }));
+        setStaff(values => ({ ...values, [name]: value }));
     }
 
     const handleSubmited = () => {
-        axios.post("http://localhost:8080/staff/create", staffInput)
+        axios.post("http://localhost:8080/admin/staff/create", staff, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(function (response) {
-                console.log(response);
+                if(response.data === true){
+                    navigate("/admin/staff/view");
+                }
+                else{
+                    setUsernameValid(false);
+                }
             })
             .catch(error => {
                 console.log(error);
@@ -53,7 +65,7 @@ function CreateStaff() {
                             type="text"
                             placeholder="Nhập tên"
                             name="fullname"
-                            value={staffInput.fullname}
+                            value={staff.fullname}
                             onChange={handleChanged}
                         />
                     </Col>
@@ -66,7 +78,7 @@ function CreateStaff() {
                             type="number"
                             placeholder="Nhập tuổi"
                             name="age"
-                            value={staffInput.age}
+                            value={staff.age}
                             onChange={handleChanged}
                         />
                     </Col>
@@ -74,13 +86,13 @@ function CreateStaff() {
                         <Form.Label>Giới tính</Form.Label>
                         <Form.Select
                             name="gender"
-                            value={staffInput.gender}
+                            value={staff.gender}
                             onChange={handleChanged}
                         >
                             <option value="">--Chọn giới tính--</option>
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                            <option value="Khác">Khác</option>
+                            <option value="Male">Nam</option>
+                            <option value="Female">Nữ</option>
+                            <option value="Other">Khác</option>
                         </Form.Select>
                     </Col>
                 </Row>
@@ -92,7 +104,7 @@ function CreateStaff() {
                             type="email"
                             placeholder="Nhập email"
                             name="email"
-                            value={staffInput.email}
+                            value={staff.email}
                             onChange={handleChanged}
                         />
                     </Col>
@@ -105,9 +117,12 @@ function CreateStaff() {
                             type="text"
                             placeholder="Nhập tên đăng nhập "
                             name="username"
-                            value={staffInput.username}
+                            value={staff.username}
                             onChange={handleChanged}
                         />
+                        {usernameValid===false && (
+                            <p style={{color : "red"}}>Tên người dùng đã tồn tại</p>
+                        )}
                     </Col>
                 </Row>
 
@@ -118,9 +133,26 @@ function CreateStaff() {
                             type="password"
                             placeholder="Nhập mật khẩu"
                             name="password"
-                            value={staffInput.password}
+                            value={staff.password}
                             onChange={handleChanged}
                         />
+
+                    </Col>
+                </Row>
+
+                <Row className="mb-3">
+                    <Col md={6}>
+                        <Form.Label>Vai trof</Form.Label>
+                        <Form.Select
+                            name="role"
+                            value={staff.role}
+                            onChange={handleChanged}
+                        >
+                            <option value="">--Chọn vai trò--</option>
+                            <option value="ADMIN">Admin</option>
+                            <option value="CASHIER">Thu ngân</option>
+                            <option value="STORE_MANAGER">Quản lý cửa hàng</option>
+                        </Form.Select>
                     </Col>
                 </Row>
 
@@ -131,25 +163,12 @@ function CreateStaff() {
                             type="text"
                             placeholder="Nhập số điện thoại"
                             name="phone"
-                            value={staffInput.phone}
+                            value={staff.phone}
                             onChange={handleChanged}
                         />
                     </Col>
                 </Row>
 
-                <Row className="mb-3">
-                    <Col>
-                        <Form.Label>Địa chỉ</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            placeholder="Nhập địa chỉ"
-                            name="address"
-                            value={staffInput.address}
-                            onChange={handleChanged}
-                        />
-                    </Col>
-                </Row>
 
                 <div className="text-center">
                     <Button className="btn-secondary me-2" as={Link} to="/admin/staff/view">Quay lại</Button>
@@ -157,8 +176,6 @@ function CreateStaff() {
                         className="btn-primary me-2"
                         variant="primary"
                         onClick={handleSubmited}
-                        as={Link}
-                        to="/admin/staff/view"
                     >Lưu</Button>
                 </div>
             </Form>

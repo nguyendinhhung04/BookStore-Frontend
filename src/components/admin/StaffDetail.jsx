@@ -16,6 +16,7 @@ function StaffDetail() {
     const discardData = useRef(null);
     const navigate = useNavigate();
     const role = useSelector((state) => state.auth.role);
+    const token = useSelector((state) => state.auth.token);
 
 
     AlertConfirm.config({
@@ -42,12 +43,19 @@ function StaffDetail() {
     };
 
     const handleSubmited = () => {
-        axios.post(`http://localhost:8080/staff/update/${staff.id}`, staff)
-            .then(() => {
+        axios.post(`http://localhost:8080/admin/staff/modify`, staff, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((res) => {
                 discardData.current = staff;
                 setEnabledModify(false);
             })
             .catch(error => console.error(error));
+
+        console.log("Submitting staff data:", staff);
+
     };
 
     const handleDiscarded = () => {
@@ -56,18 +64,31 @@ function StaffDetail() {
     };
 
     const handleDelete = () => {
-        axios.post(`http://localhost:8080/staff/delete/${staff.id}`)
+        axios.delete(`http://localhost:8080/admin/staff/delete/${staff.id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(() => navigate("/admin/staff/view"))
             .catch(error => console.error(error));
     };
 
+
     useEffect(() => {
-        axios.get(`http://localhost:8080/staff/detail/${params.staffId}`)
+        axios.get(`http://localhost:8080/admin/staff/detail/${params.id}`, {
+            headers : {
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then(response => {
                 setStaff(response.data);
                 discardData.current = response.data;
+                console.log("Staff data fetched:", response.data);
+
             })
             .catch(error => console.error("Error fetching data:", error));
+
+
     }, []);
 
     if( role !== "ROLE_ADMIN") {
@@ -92,14 +113,6 @@ function StaffDetail() {
                 okText="Xóa"
                 cancelText="Hủy"
             />
-
-            <Row className="text-center mb-3">
-                <Col>
-                    <Image src="https://via.placeholder.com/100" roundedCircle className="border" />
-                    <h5 className="mt-2">Email: {staff.email}</h5>
-                    <p>ID: {staff.id}</p>
-                </Col>
-            </Row>
 
             <Form>
                 <Row className="mb-3">
@@ -135,9 +148,9 @@ function StaffDetail() {
                             onChange={handleChanged}
                         >
                             <option value="">--Chọn--</option>
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                            <option value="Khác">Khác</option>
+                            <option value="Male">Nam</option>
+                            <option value="Female">Nữ</option>
+                            <option value="Other">Khác</option>
                         </Form.Select>
                     </Col>
                 </Row>
@@ -181,19 +194,6 @@ function StaffDetail() {
                     </Col>
                 </Row>
 
-                <Row className="mb-3">
-                    <Col>
-                        <Form.Label>Địa chỉ</Form.Label>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            name="address"
-                            disabled={!enabledModify}
-                            value={staff.address}
-                            onChange={handleChanged}
-                        />
-                    </Col>
-                </Row>
 
                 {enabledModify ? (
                     <div className="text-center">

@@ -22,7 +22,6 @@ import {CreatePayment} from "./components/admin/Cashier/CreatePayment";
 import {SearchBill} from "./components/admin/Cashier/SearchBill";
 import {DetailBill} from "./components/admin/Cashier/DetailBill";
 import {BookDetail} from "./components/admin/Book/BookDetail";
-import {AuthorDetail} from "./components/admin/Author/AuthorDetail";
 
 function App() {
     return (
@@ -42,9 +41,9 @@ function App() {
                     <Route path="/admin/customer/view" element={<User/>} />
                     <Route path='/admin/customer/detail/:userId' element={<UserDetail/>} />
                     <Route path='/admin/customer/create' element ={< CreateUser/>} />
-                    <Route path='/admin/Staff/view' element ={< Staff/>} />
-                    <Route path='/admin/Staff/create' element ={< CreateStaff/>} />
-                    <Route path='/admin/Staff/detail/:id' element={< StaffDetail/>} />
+                    <Route path='/admin/staff/view' element ={< Staff/>} />
+                    <Route path='/admin/staff/create' element ={< CreateStaff/>} />
+                    <Route path='/admin/staff/detail/:id' element={< StaffDetail/>} />
 
 
                     <Route path='/admin/resource/' element={< ResourceManage/>}>

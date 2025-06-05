@@ -44,7 +44,11 @@ function Staff() {
 
     const handleDelete = (id) => {
         if (window.confirm("Bạn có chắc chắn muốn xoá nhân viên này không?")) {
-            axios.delete(`http://localhost:8080/staff/delete/${id}`)
+            axios.delete(`http://localhost:8080/admin/staff/delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
                 .then(() => {
                     fetchStaff(); // reload danh sách sau khi xoá
                 })
@@ -83,6 +87,31 @@ function Staff() {
                 <PrimeColumn field="id" header="ID" filter style={{ width: "150px", textAlign: "left" }} />
                 <PrimeColumn field="fullname" header="Name" filter style={{  textAlign: "left" }} />
                 <PrimeColumn field="role" header="Role" filter style={{  textAlign: "left" }} />
+
+                <PrimeColumn
+                    header="Action"
+                    body={rowData => (
+                        <>
+                            <Button
+                                as={Link}
+                                to={`/admin/staff/detail/${rowData.id}`}
+                                className="btn btn-primary w-auto"
+                                size="sm"
+                                style={{ marginRight: "4px" }}
+                            >
+                                Detail
+                            </Button>
+                            <Button
+                                onClick={() => handleDelete(rowData.id)}
+                                className="btn btn-danger w-auto"
+                                size="sm"
+                            >
+                                Delete
+                            </Button>
+                        </>
+                    )}
+                />
+
             </PrimeDataTable>
 
         </Container>
