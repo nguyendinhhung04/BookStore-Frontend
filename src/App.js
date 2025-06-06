@@ -15,7 +15,7 @@ import {ResourceManage} from "./components/admin/ResourceManage";
 import {Login} from "./components/admin/Login";
 import {PrivateRoute} from "./components/admin/PrivateRoute";
 import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
-import {Author} from "./components/admin/Author";
+import {Author as AdminAuthor} from "./components/admin/Author";
 import {Publisher} from "./components/admin/Publisher";
 import {CashierHome} from "./components/admin/Cashier/CashierHome";
 import {CreatePayment} from "./components/admin/Cashier/CreatePayment";
@@ -23,6 +23,10 @@ import {SearchBill} from "./components/admin/Cashier/SearchBill";
 import {DetailBill} from "./components/admin/Cashier/DetailBill";
 import {BookDetail} from "./components/admin/Book/BookDetail";
 import {CreateBook} from "./components/admin/Book/CreateBook";
+import DetailsBook from "./components/client/DetailsBook";
+import DetailsAuthor from "./components/client/DetailsAuthor";
+import Author from "./components/client/Author";
+import {Category} from "./components/client/Category";
 
 function App() {
     return (
@@ -31,6 +35,11 @@ function App() {
             <Routes>
                 <Route path="/" element={<UserLayout/>}>
                     <Route index element={<Home/>}/>
+                    <Route path="book/:id" element={<DetailsBook />} />
+                    <Route path="author" element={<Author />} />
+                    <Route path="author/:id" element={<DetailsAuthor />} />
+                    <Route path="category" element={<Category/>}/>
+                    {/*<Route path="ebooks" element={<EBooks/>}/>*/}
                 </Route>
                 <Route path="/admin/login" element={<Login/>} />
                 <Route path="/admin/" element={
@@ -51,7 +60,7 @@ function App() {
                         <Route index element={<Book/>}/>
                         <Route path = '/admin/resource/book/:id' element={<BookDetail/>}/>
                         <Route path = '/admin/resource/book/create' element={<CreateBook/>}/>
-                        <Route path="/admin/resource/author" element={<Author/>}/>
+                        <Route path="/admin/resource/author" element={<AdminAuthor/>}/>
                         <Route path="/admin/resource/publisher" element={<Publisher/>}/>
                         
                     </Route>

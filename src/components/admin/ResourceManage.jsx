@@ -1,7 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { useState } from "react";
 import { Book } from "./Book"
-import {Category} from "./Category";
 import {Outlet, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 
