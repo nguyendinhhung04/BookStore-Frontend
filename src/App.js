@@ -22,6 +22,7 @@ import {CreatePayment} from "./components/admin/Cashier/CreatePayment";
 import {SearchBill} from "./components/admin/Cashier/SearchBill";
 import {DetailBill} from "./components/admin/Cashier/DetailBill";
 import {BookDetail} from "./components/admin/Book/BookDetail";
+import {CreateBook} from "./components/admin/Book/CreateBook";
 
 function App() {
     return (
@@ -49,6 +50,7 @@ function App() {
                     <Route path='/admin/resource/' element={< ResourceManage/>}>
                         <Route index element={<Book/>}/>
                         <Route path = '/admin/resource/book/:id' element={<BookDetail/>}/>
+                        <Route path = '/admin/resource/book/create' element={<CreateBook/>}/>
                         <Route path="/admin/resource/author" element={<Author/>}/>
                         <Route path="/admin/resource/publisher" element={<Publisher/>}/>
                         

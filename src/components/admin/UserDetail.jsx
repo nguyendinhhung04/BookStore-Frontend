@@ -82,6 +82,7 @@ export function UserDetail() {
     }
 
     const handleFileChange = (e) => {
+
         const file = e.target.files[0];
         setInputImg(file); //use useState để lưu ảnh để gửi cho backend riêng với useState ảnh hiển thị  để tránh việc gửi bằng reader.result sẽ khiến request quá kích thước
         if (file) {
