@@ -67,6 +67,7 @@ function CreateStaff() {
                             name="fullname"
                             value={staff.fullname}
                             onChange={handleChanged}
+                            required
                         />
                     </Col>
                 </Row>
@@ -80,6 +81,7 @@ function CreateStaff() {
                             name="age"
                             value={staff.age}
                             onChange={handleChanged}
+                            required
                         />
                     </Col>
                     <Col md={6}>
@@ -88,6 +90,7 @@ function CreateStaff() {
                             name="gender"
                             value={staff.gender}
                             onChange={handleChanged}
+                            required
                         >
                             <option value="">--Chọn giới tính--</option>
                             <option value="Male">Nam</option>
@@ -106,6 +109,7 @@ function CreateStaff() {
                             name="email"
                             value={staff.email}
                             onChange={handleChanged}
+                            required
                         />
                     </Col>
                 </Row>
@@ -119,6 +123,7 @@ function CreateStaff() {
                             name="username"
                             value={staff.username}
                             onChange={handleChanged}
+                            required
                         />
                         {usernameValid===false && (
                             <p style={{color : "red"}}>Tên người dùng đã tồn tại</p>
@@ -135,6 +140,7 @@ function CreateStaff() {
                             name="password"
                             value={staff.password}
                             onChange={handleChanged}
+                            required
                         />
 
                     </Col>
@@ -147,6 +153,7 @@ function CreateStaff() {
                             name="role"
                             value={staff.role}
                             onChange={handleChanged}
+                            required
                         >
                             <option value="">--Chọn vai trò--</option>
                             <option value="ADMIN">Admin</option>
@@ -165,6 +172,7 @@ function CreateStaff() {
                             name="phone"
                             value={staff.phone}
                             onChange={handleChanged}
+                            required
                         />
                     </Col>
                 </Row>

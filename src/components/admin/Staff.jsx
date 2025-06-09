@@ -89,6 +89,7 @@ function Staff() {
                 <PrimeColumn field="role" header="Role" filter style={{  textAlign: "left" }} />
 
                 <PrimeColumn
+                    style ={{ display : "flex"}}
                     header="Action"
                     body={rowData => (
                         <>

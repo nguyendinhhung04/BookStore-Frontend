@@ -1,11 +1,20 @@
 import {Button, Card, Col, Form, Image, Row} from "react-bootstrap";
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import axios from "axios";
+import {useSelector} from "react-redux";
 
 export function CreateBook() {
+    const token = useSelector((state) => state.auth.token);
 
     const fileInputRef = useRef(null);
     const [imgSrc, setImgSrc] = React.useState("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
     const [inputImg, setInputImg] = React.useState(null);
+    const [authorList, setAuthorList] = useState([]);
+    const [inputAuthor, setInputAuthor] = useState(0);
+    const [publisherList, setPublisherList] = useState([]);
+
+
+
     const [inputBook, setInputBook] = React.useState(
         {
             book_name: "",
@@ -20,26 +29,59 @@ export function CreateBook() {
             translator: "",
             cover_image : null,
             publish_date : null,
-            publisher: null,
-            compose : {}
+            publisher_id: null,
+            author_ids : []
         }
     );
 
-    const fakeBookForm = {
-        title: "To Kill a Mockingbird",
-        author: "Harper Lee",
-        publisher: "J.B. Lippincott & Co.",
-        category: "Classic",
-        isbn: "9780061120084",
-        description: "A novel about the serious issues of rape and racial inequality, told through the eyes of a child.",
-        coverUrl: "https://covers.openlibrary.org/b/id/8228691-L.jpg"
+
+    const handleAddAuthor = () => {
+        if( inputBook.author_ids.includes( Number(inputAuthor)) )
+        {
+            return
+        }
+
+        setInputBook(prev => ({
+            ...prev,
+            author_ids: [...prev.author_ids, Number(inputAuthor)]
+        }));
+        console.log(inputAuthor);
     };
 
-    const [form, setForm] = useState(fakeBookForm);
+    const onhandleRemoveAuthor = (authorId) => {
+        setInputBook(prev => ({
+            ...prev,
+            author_ids: prev.author_ids.filter(id => id !== Number(authorId))
+        }));
+    };
 
-    const handleChange = (e) => {}
+    const onhandleChoosePublisher = (e) => {
+        const { name, value } = e.target;
+        setInputBook(prev => ({ ...prev, [name]: Number(value) }));
+    }
 
-    const handleSave = (e) => {}
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setInputBook(prev => ({ ...prev, [name]: value }));
+    }
+
+    const handleSave = (e) => {
+        const formData = new FormData();
+        formData.append("bookInfo", new Blob(
+            [JSON.stringify(inputBook)],
+            { type: "application/json" }
+        ));
+        formData.append("inputImg", inputImg);
+        console.log(formData);
+        axios.post("http://localhost:8080/admin/resource/book/create", formData, {
+            headers: {
+                Authorization: `Bearer ${token}`
+}
+        })
+            .then((response) => {console.log(response.data);})
+            .catch((error) => {console.log(error)});
+
+    }
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -53,6 +95,18 @@ export function CreateBook() {
         }
     };
 
+    useEffect(() => {
+        axios.get("http://localhost:8080/admin/resource/author/all")
+            .then(res => {
+                setAuthorList(res.data)
+            })
+            .catch(err => {console.log(err)})
+
+        axios.get("http://localhost:8080/admin/resource/publisher/all")
+            .then(res => {setPublisherList(res.data)})
+            .catch(err => {console.log(err)})
+    },[])
+
 
 
 
@@ -62,15 +116,8 @@ export function CreateBook() {
                 <Col md={8}>
                     <Card className="shadow-lg p-3 mb-5 bg-white rounded">
                         <Row>
-                            <Col md={4} className="d-flex align-items-center justify-content-center">
-                                {/*<img*/}
-                                {/*    src={form.coverUrl || 'https://via.placeholder.com/150'}*/}
-                                {/*    alt={form.title}*/}
-                                {/*    className="img-fluid rounded shadow-sm"*/}
-                                {/*    style={{ width: '100%', maxWidth: 200, height: 'auto', objectFit: 'cover' }}*/}
-                                {/*/>*/}
-
-                                <Row className="text-center mb-3">
+                            <Col md={4} className="d-flex flex-column align-items-center justify-content-center">
+                                <Row className="text-center mb-3 w-100">
                                     <Col>
                                         <Image
                                             src={imgSrc}
@@ -82,6 +129,10 @@ export function CreateBook() {
                                                 transition: 'transform 0.3s ease',
                                             }}
                                         />
+                                    </Col>
+                                </Row>
+                                <Row className="text-center w-100">
+                                    <Col>
                                         <Button variant="secondary" onClick={() => fileInputRef.current.click()}>
                                             Chọn ảnh
                                         </Button>
@@ -92,28 +143,131 @@ export function CreateBook() {
                                             onChange={handleFileChange}
                                             style={{ display: 'none' }}
                                         />
-
                                     </Col>
                                 </Row>
-
-
-
                             </Col>
                             <Col md={8}>
                                 <Card.Body>
                                     <Form onSubmit={e => { e.preventDefault(); handleSave(); }}>
-                                        <Form.Group className="mb-3" controlId="formTitle">
+                                        <Form.Group className="mb-3" >
                                             <Form.Label>Name</Form.Label>
-                                            <Form.Control name="book_name" value={inputBook.book_name} onChange={() => {handleChange()}} required />
+                                            <Form.Control name="book_name" value={inputBook.book_name} onChange={(e) => {handleChange(e)}} required />
                                         </Form.Group>
 
-                                        <Form.Group className="mb-3" controlId="formTitle">
-                                            <Form.Label>Name</Form.Label>
-                                            <Form.Control name="book_name" value={inputBook.book_name} onChange={() => {handleChange()}} required />
+                                        <Row>
+                                            <Col>
+                                                <Form.Label>Category</Form.Label>
+                                                <Form.Select
+                                                    name="category"
+                                                    value = {inputBook.category}
+                                                    onChange={(e) => {handleChange(e)}} required
+                                                >
+                                                    <option value={""} >Choose a category</option>
+                                                    <option value={"FICTION"} >FICTION</option>
+                                                    <option value={"NON_FICTION"}>NON_FICTION</option>
+                                                    <option value={"SCIENCE"} >SCIENCE</option>
+                                                    <option value={"TECHNOLOGY"} >TECHNOLOGY</option>
+                                                    <option value={"HISTORY"} >HISTORY</option>
+                                                    <option value={"BIOGRAPHY"} >BIOGRAPHY</option>
+                                                    <option value={"CHILDREN"} >CHILDREN</option>
+                                                    <option value={"SELF_HELP"} >SELF_HELP</option>
+                                                    <option value={"ROMANCE"} >ROMANCE</option>
+                                                </Form.Select>
+                                            </Col>
+                                            <Col>
+                                                <Form.Label>Language</Form.Label>
+                                                <Form.Select
+                                                    name="language"
+                                                    value = {inputBook.language}
+                                                    onChange={(e) => {handleChange(e)}} required
+                                                >
+                                                    <option value={""} >Choose a language</option>
+                                                    <option value={"VIETNAMESE"} >VIETNAMESE</option>
+                                                    <option value={"ENGLISH"}>ENGLISH</option>
+                                                    <option value={"OTHER"} >OTHER</option>
+                                                </Form.Select>
+                                            </Col>
+                                        </Row>
+
+
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Author</Form.Label>
+                                            <Row>
+                                                <Col>
+                                                    <Form.Select
+                                                        name="author"
+                                                        value={inputAuthor}
+                                                        onChange={e => {setInputAuthor(e.target.value);  }}
+                                                        required
+                                                    >
+                                                        <option value="">Select author</option>
+                                                        {authorList.map((author) => (
+                                                            <option key={author.id} value={author.id}>
+                                                                {author.name}
+                                                            </option>
+                                                        ))}
+                                                    </Form.Select>
+                                                </Col>
+                                                <Col xs="auto" className="d-flex align-items-center">
+                                                    <Button onClick={(e) => {handleAddAuthor(e)}} >Add</Button>
+                                                </Col>
+                                            </Row>
+                                            {inputBook.author_ids.map((authorId) => (
+                                                <div key={authorId} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
+                                                    <p style={{ margin: 0 }}>
+                                                        {authorList.find(author => author.id == authorId)?.name || "Unknown Author"}
+                                                    </p>
+                                                    <Button onClick={(e) => {onhandleRemoveAuthor(authorId)}}>X</Button>
+                                                </div>
+                                            ))}
+                                        </Form.Group>
+
+                                        <Form.Label>Publisher</Form.Label>
+                                        <Form.Select
+                                            name="publisher_id"
+                                            value = {inputBook.publisher_id}
+                                            onChange={(e) => {onhandleChoosePublisher(e)}} required
+                                        >
+                                            <option value={0} >Choose a publisher</option>
+                                            {publisherList.map((publisher) => (
+                                                <option key={publisher.id} value={Number(publisher.id)} >{publisher.name}</option>
+                                            ))}
+                                        </Form.Select>
+
+                                        <Form.Group>
+
+                                            <Form.Label>Publish Date</Form.Label>
+                                            <Form.Control
+                                                type="date"
+                                                name="publish_date"
+                                                value={inputBook.publish_date}
+                                                onChange={(e) => {handleChange(e)}}
+                                                required
+                                            />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label>Introduction</Form.Label>
+                                            <Form.Control name="introduction" value={inputBook.introduction} onChange={(e) => {handleChange(e)}} required />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label>Translator</Form.Label>
+                                            <Form.Control name="translator" value={inputBook.translator} onChange={(e) => {handleChange(e)}} required />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label>Price</Form.Label>
+                                            <Form.Control type="number" name="price" value={inputBook.price} onChange={(e) => {handleChange(e)}} required />
+                                        </Form.Group>
+
+                                        <Form.Group className="mb-3" >
+                                            <Form.Label>Discount</Form.Label>
+                                            <Form.Control type="number" name="discount" value={inputBook.discount} onChange={(e) => {handleChange(e)}} required />
                                         </Form.Group>
 
                                         <div className="d-flex gap-2 mt-3">
-                                            <Button variant="primary" type="submit">Save</Button>
+                                            <Button variant="primary" type="submit"  >Save</Button>
                                         </div>
                                     </Form>
                                 </Card.Body>

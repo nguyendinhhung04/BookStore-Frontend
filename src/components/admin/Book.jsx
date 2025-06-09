@@ -46,7 +46,6 @@ export function Book() {
                     tableStyle={{ minWidth: '50rem' }}
                     onFilter={(e) => setFilters(e.filters)}
                 >
-                    <PrimeColumn field="id" header="ID" filter style={{ width: "150px", textAlign: "left" }} />
                     <PrimeColumn field="book_name" header="Name" filter style={{  textAlign: "left" }} />
                     <PrimeColumn field="code" header="Code" filter style={{  textAlign: "left" }} />
                     <PrimeColumn field="category" header="Category" filter style={{  textAlign: "left" }} />

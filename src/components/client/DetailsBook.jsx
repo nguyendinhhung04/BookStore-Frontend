@@ -21,7 +21,7 @@ const DetailsBook = () => {
     if (!book) return <div>Đang tải...</div>;
 
     return (
-        <div className="container">
+        <div className="container" style={{display: "flex", height : "100vh"}}>
             <div className="imageWrapper">
                 <img src={`data:${book.coverImage.imageType};base64,${book.coverImage.data}`|| "https://bizweb.dktcdn.net/100/363/455/products/con-duong-tinh-thuc-01.jpg?v=1744625216473"} alt={book.book_name} className="bookImage" />
             </div>
