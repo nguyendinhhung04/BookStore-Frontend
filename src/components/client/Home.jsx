@@ -425,7 +425,7 @@ export function Home() {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await fetch('http://localhost:8080/admin/resource/book/all');
+            const response = await fetch('http://localhost:8080/admin/resource/book/onSale');
             const data = await response.json();
             setBooks(data);
         };

@@ -9,6 +9,18 @@ export function CreatePayment() {
     const [customer,setCustomer] = useState({});
     const params = useParams();
     const token = useSelector((state) => state.auth.token);
+    const [bookList, setBookList] = useState([]);
+    const [bookCode, setBookCode] = useState('');
+
+    const onAddBook = () => {
+        axios.get(`http://localhost:8080/admin/resource/book/code/${bookCode}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => {console.log(response.data);})
+            .catch(error => console.log(error));
+    }
 
     useEffect(() => {
         console.log(`Bearer ${token}`);
@@ -47,11 +59,12 @@ export function CreatePayment() {
                                <Form>
                                    <div className="d-flex justify-content-start align-items-center gap-2">
                                        <Form.Control
-                                           type="text"
+                                           type="number"
                                            placeholder="Enter book code"
                                            className="w-25"
+                                           onChange={(e) => setBookCode(e.target.value)}
                                        />
-                                       <button type="button" className="btn btn-primary mb-2">Add</button>
+                                       <button type="button" className="btn btn-primary mb-2" onClick={(e) => {onAddBook()}}>Add</button>
                                        <button type="button" className="btn btn-danger mb-2">Delete</button>
                                    </div>
                                    <Form.Group controlId="formCheckboxTable">

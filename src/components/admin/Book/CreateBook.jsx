@@ -2,6 +2,7 @@ import {Button, Card, Col, Form, Image, Row} from "react-bootstrap";
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 export function CreateBook() {
     const token = useSelector((state) => state.auth.token);
@@ -12,7 +13,7 @@ export function CreateBook() {
     const [authorList, setAuthorList] = useState([]);
     const [inputAuthor, setInputAuthor] = useState(0);
     const [publisherList, setPublisherList] = useState([]);
-
+    const navigate = useNavigate();
 
 
     const [inputBook, setInputBook] = React.useState(
@@ -30,6 +31,7 @@ export function CreateBook() {
             cover_image : null,
             publish_date : null,
             publisher_id: null,
+            onSale : true,
             author_ids : []
         }
     );
@@ -80,6 +82,8 @@ export function CreateBook() {
         })
             .then((response) => {console.log(response.data);})
             .catch((error) => {console.log(error)});
+
+        navigate("/admin/resource/");
 
     }
 
@@ -257,8 +261,27 @@ export function CreateBook() {
                                         </Form.Group>
 
                                         <Form.Group className="mb-3" >
-                                            <Form.Label>Price</Form.Label>
-                                            <Form.Control type="number" name="price" value={inputBook.price} onChange={(e) => {handleChange(e)}} required />
+                                            <Row>
+                                                <Col>
+                                                    <Form.Label>Price</Form.Label>
+                                                    <Form.Control type="number" name="price" value={inputBook.price} onChange={(e) => {handleChange(e)}} required />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label>Quantity</Form.Label>
+                                                    <Form.Control type="number" name="quantity" value={inputBook.quantity} onChange={(e) => {handleChange(e)}} required />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Label>OnSale</Form.Label>
+                                                    <Form.Check
+                                                        type="switch"
+                                                        label="On Sale"
+                                                        name="onSale"
+                                                        checked={inputBook.onSale}
+                                                        onChange={e => setInputBook(prev => ({ ...prev, onSale: e.target.checked }))}
+                                                        className="mt-4"
+                                                    />
+                                                </Col>
+                                            </Row>
                                         </Form.Group>
 
                                         <Form.Group className="mb-3" >
