@@ -12,35 +12,16 @@ import {useSelector} from "react-redux";
 
 export function UserDetail() {
     const [enabledModify, setEnabledModify] = React.useState(false);
-    const [hovered, setHovered] = useState(false);
-    const [Alertvisible, setAlertVisible] = useState(false);
     const params = useParams();
     const discardData = useRef(null);
     const navigate = useNavigate();
-    const [imgSrc, setImgSrc] = React.useState("https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png?20210521171500");
-    const fileInputRef = useRef(null);
-    const [inputImg, setInputImg] = React.useState(null);
-    const discardImageRef = useRef(null);
+    const token = useSelector((state) => state.auth.token);
+
     const role = useSelector((state) => state.auth.role);
-
-    AlertConfirm.config({
-        maskClosable: true,
-        closeAfter: () => {
-            console.log("close");
-        },
-    });
-
-    const handleImageClick = () => {
-        if (enabledModify){
-            fileInputRef.current.click();
-        }
-    };
 
     const [user,setUser] = React.useState( {
         id : params.userId,
         email: "",
-        username: "",
-        password: "",
         fullname: "",
         age: -1,
         gender : "",
@@ -50,77 +31,62 @@ export function UserDetail() {
 
     const handleChanged = (event) => {
         setUser({...user, [event.target.name]: event.target.value});
-
     }
 
     const handleSubmited = (event) => {
-        const formData = new FormData();
-        formData.append("imgData", inputImg);
-        formData.append("userData", new Blob(
-            [JSON.stringify(user)],
-            { type: "application/json" }
-        ));
-        axios.post("http://localhost:8080/customer/edit", formData)
-            .then(function (response) {
-                discardData.current = user;
-                discardImageRef.current = imgSrc;
-                setEnabledModify(false);
-            })
-            .catch(error => {console.log(error)});
+        // const formData = new FormData();
+        // formData.append("userData", new Blob(
+        //     [JSON.stringify(user)],
+        //     { type: "application/json" }
+        // ));
+        // axios.post("http://localhost:8080/customer/edit", formData)
+        //     .then(function (response) {
+        //         discardData.current = user;
+        //         discardImageRef.current = imgSrc;
+        //         setEnabledModify(false);
+        //     })
+        //     .catch(error => {console.log(error)});
     }
 
     const handleDiscarded = (event) => {
         setUser(discardData.current);
-        setImgSrc(discardImageRef.current);
         setEnabledModify(false);
     }
 
-    const handleDelete = (event) => {
-        axios.post(`http://localhost:8080/admin/customer/delete/${user.id}`)
-            .then(response => {navigate("/admin/user/view/")})
-            .catch(error => {console.log(error)});
-    }
-
-    const handleFileChange = (e) => {
-
-        const file = e.target.files[0];
-        setInputImg(file); //use useState để lưu ảnh để gửi cho backend riêng với useState ảnh hiển thị  để tránh việc gửi bằng reader.result sẽ khiến request quá kích thước
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImgSrc(reader.result); // hiển thị ảnh mới
-            };
-            reader.readAsDataURL(file);
-        }
-    };
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/admin/customer/detail/${params.userId}`)
+        axios.get(`http://localhost:8080/admin/customer/detail/${params.userId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
             .then(response => {
 
                 console.log(response.data);
 
-                setImgSrc(`data:${response.data.imageType};base64,${response.data.data }`)
-
                 setUser({
                     id : params.userId,
-                    username: response.data.username,
                     email: response.data.email,
-                    password: response.data.password,
                     fullname: response.data.fullname,
                     age: response.data.age,
                     gender : response.data.gender,
                     phone:response.data.phone,
                     address: response.data.address,
                 })
-                discardData.current = user;
-                discardImageRef.current = imgSrc;
+                discardData.current = {
+                    id : params.userId,
+                    email: response.data.email,
+                    fullname: response.data.fullname,
+                    age: response.data.age,
+                    gender : response.data.gender,
+                    phone:response.data.phone,
+                    address: response.data.address,
+                };
+                console.log("Discard data:", discardData.current);
             })
             .catch(error => console.error("Error fetching data:", error));
     }, [params.userId]);
 
 
-    if( role !== "ROLE_ADMIN") {
+    if( role !== "ROLE_CASHIER") {
         return (
             <div className="text-center mt-5">
                 <h3 className="text-danger">You do not have permission to access this page.</h3>
@@ -131,76 +97,7 @@ export function UserDetail() {
     return (
         <Container className="mt-4 p-4 border rounded shadow-lg bg-white" style={{ maxWidth: "600px" }}>
 
-            <AlertConfirm
-                maskClosable
-                title="Do you Want to delete these items?"
-                desc="Some descriptions"
-                visible={Alertvisible}
-                okText="Yes"
-                onOk={() => {
-                    setAlertVisible(false);
-                    handleDelete();
-                }}
-                cancelText="No"
-                onCancel={() => setAlertVisible(false)}
-            />
-
-            {/*<Row className="text-center mb-3">*/}
-            {/*    <Col>*/}
-            {/*        <Image*/}
-            {/*            src={imgSrc}*/}
-            {/*            roundedCircle*/}
-            {/*            className="border"*/}
-            {/*            style={{*/}
-            {/*                width : "150px",*/}
-            {/*                height : "150px",*/}
-            {/*                borderRadius: "50%",*/}
-            {/*                transform: hovered ? 'scale(1.1)' : 'scale(1)',*/}
-            {/*                transition: 'transform 0.3s ease',*/}
-            {/*                cursor: 'pointer'*/}
-            {/*            }}*/}
-            {/*            onMouseEnter={() => setHovered(true && enabledModify)}*/}
-            {/*            onMouseLeave={() => setHovered(false && enabledModify)}*/}
-            {/*            onClick={handleImageClick}*/}
-            {/*        />*/}
-            {/*        <input*/}
-            {/*            type="file"*/}
-            {/*            accept="image/*"*/}
-            {/*            ref={fileInputRef}*/}
-            {/*            style={{ display: 'none' }}*/}
-            {/*            onChange={handleFileChange}*/}
-            {/*        />*/}
-            {/*        <h5 className="mt-2">Email: {user.email}</h5>*/}
-            {/*        <p>ID: {params.userId}</p>*/}
-            {/*    </Col>*/}
-            {/*</Row>*/}
-
             <Form >
-
-                <Row>
-                    <Col>
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhập username"
-                            disabled={true}
-                            name = "username"
-                            value = {user.username}
-                        />
-                    </Col>
-
-                    <Col>
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Nhập username"
-                            disabled={!enabledModify}
-                            name = "fullname"
-                            value = {user.password}
-                            onChange={handleChanged}
-                        />
-                    </Col>
-                </Row>
 
                 <Row className="mb-3">
                     <Col>
@@ -255,6 +152,20 @@ export function UserDetail() {
                         />
                     </Col>
                 </Row>
+                <Row className="mb-3">
+                    <Col>
+                        <Form.Label>Email:</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="Nhập email"
+                            disabled={!enabledModify}
+                            name = "email"
+                            value = {user.email}
+                            onChange={handleChanged}
+                        />
+                    </Col>
+                </Row>
+
 
                 <Row className="mb-3">
                     <Col>
@@ -279,7 +190,6 @@ export function UserDetail() {
                 <div className="text-end" style={{ display: enabledModify === false ? "block" : "none" }}>
 
                     <Button variant="primary" className="btn-warning me-2" onClick={ ()=> {setEnabledModify(true)} }>Modify</Button>
-                    <Button variant="primary" className="btn-danger me-2" onClick={()=>{setAlertVisible(true)}}>Delete</Button>
                 </div>
 
             </Form>

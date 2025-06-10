@@ -2,40 +2,32 @@ import { Card, Table, Container, Row, Col } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import {useSelector} from "react-redux";
 
 export function DetailBill() {
-    const [billData, setBillData] = useState({
-        customer: {
-            fullname: 'Nguyen Van A',
-            email: 'nguyenvana@gmail.com',
-            phone: '0123456789',
-            address: '123 Nguyen Van B Street, District 1, HCMC'
-        },
-        billInfo: {
-            id: "BILL001",
-            paymentDate: '2025-06-02',
-            totalAmount: 450000,
-            status: 'Completed'
-        },
-        books: [
-            {
-                id: 1,
-                name: 'Dac Nhan Tam',
-                author: 'Dale Carnegie',
-                quantity: 2,
-                price: 150000
-            },
-            {
-                id: 2,
-                name: 'Nha Gia Kim',
-                author: 'Paulo Coelho',
-                quantity: 1,
-                price: 150000
+
+    const [billData, setBillData] = useState({});
+    const {billId} = useParams(); // Assuming you have a route like /admin/bill/:billId
+    const token = useSelector((state) => state.auth.token);
+
+
+    useEffect( ()=>{
+
+        axios.get(`http://localhost:8080/admin/resource/bill/${billId}`, {
+            headers: {
+                Authorization : `Bearer ${token}`
             }
-        ]
-    });
+        })
+            .then( res => {console.log(res.data);setBillData(res.data);})
+            .catch( err => console.log(err));
+
+    }, [] )
+
+
 
     return (
+
+
         <Container className="py-4">
             <h2 className="text-center mb-4">Chi Tiết Hóa Đơn</h2>
 
@@ -48,12 +40,12 @@ export function DetailBill() {
                         <Card.Body>
                             <Row>
                                 <Col md={6}>
-                                    <p><strong>Họ tên:</strong> {billData.customer.fullname}</p>
-                                    <p><strong>Email:</strong> {billData.customer.email}</p>
+                                    <p><strong>Họ tên:</strong> {billData.customer?.fullname}</p>
+                                    <p><strong>Email:</strong> {billData.customer?.email}</p>
                                 </Col>
                                 <Col md={6}>
-                                    <p><strong>Số điện thoại:</strong> {billData.customer.phone}</p>
-                                    <p><strong>Địa chỉ:</strong> {billData.customer.address}</p>
+                                    <p><strong>Số điện thoại:</strong> {billData.customer?.phone}</p>
+                                    <p><strong>Địa chỉ:</strong> {billData.customer?.address}</p>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -70,12 +62,13 @@ export function DetailBill() {
                         <Card.Body>
                             <Row>
                                 <Col md={6}>
-                                    <p><strong>Mã hóa đơn:</strong> {billData.billInfo.id}</p>
-                                    <p><strong>Ngày thanh toán:</strong> {billData.billInfo.paymentDate}</p>
+                                    <p><strong>Mã hóa đơn:</strong> {billData.id}</p>
+                                    <p><strong>Ngày tạo:</strong> {billData.create_date}</p>
+                                    <p><strong>Ngày thanh toán:</strong> {billData.payment_date ? billData.payment_date : "Chưa thanh toán"}</p>
+
                                 </Col>
                                 <Col md={6}>
-                                    <p><strong>Tổng tiền:</strong> {billData.billInfo.totalAmount.toLocaleString('vi-VN')} VNĐ</p>
-                                    <p><strong>Trạng thái:</strong> {billData.billInfo.status}</p>
+                                    <p><strong>Tổng tiền:</strong> ..... VNĐ</p>
                                 </Col>
                             </Row>
                         </Card.Body>
@@ -100,19 +93,17 @@ export function DetailBill() {
                             </tr>
                         </thead>
                         <tbody>
-                            {billData.books.map((book, index) => (
-                                <tr key={book.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{book.name}</td>
-                                    <td>{book.author}</td>
-                                    <td>{book.quantity}</td>
-                                    <td>{book.price.toLocaleString('vi-VN')} VNĐ</td>
-                                    <td>{(book.price * book.quantity).toLocaleString('vi-VN')} VNĐ</td>
-                                </tr>
-                            ))}
+                        <tr>
+                            <td>1</td>
+                            <td>Naruto</td>
+                            <td>....</td>
+                            <td>100</td>
+                            <td>100 VNĐ</td>
+                            <td>100 VNĐ</td>
+                        </tr>
                             <tr className="fw-bold">
                                 <td colSpan="5" className="text-end">Tổng cộng:</td>
-                                <td>{billData.billInfo.totalAmount.toLocaleString('vi-VN')} VNĐ</td>
+                                <td>100 VNĐ</td>
                             </tr>
                         </tbody>
                     </Table>

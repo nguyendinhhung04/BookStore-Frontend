@@ -67,7 +67,7 @@ function App() {
                     <Route path = "/admin/cashier" element={<CashierHome/>} />
                     <Route path = "/admin/cashier/create/:id" element={<CreatePayment/>} />
                     <Route path = "/admin/cashier/searchBill" element={<SearchBill/>} />
-                    <Route path="/admin/cashier/bill" element={<DetailBill/>}/>
+                    <Route path="/admin/resource/bill/:billId" element={<DetailBill/>}/>
                 </Route>
             </Routes>
         // </PrimeReactProvider>
