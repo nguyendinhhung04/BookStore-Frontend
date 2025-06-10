@@ -66,7 +66,7 @@ const DetailsBook = () => {
                     <p> Ngày xuất bản: {book.publish_date}</p>
                     <p> Dịch giả: {book.translator}</p>
                     <p> Nhà xuất bản: {book.publisher || "Nhà xuất bản Hà Nội"}</p>
-                    <p> Số lượng: {book.quantity} quyển</p>
+                    {/*<p> Số lượng: {book.quantity} quyển</p>*/}
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 import {Col, Container, Form, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useSelector} from "react-redux";
 
 export function CreatePayment() {
@@ -15,6 +15,7 @@ export function CreatePayment() {
     const [bookQuantity, setBookQuantity] = useState(1);
     const [selectedBooks, setSelectedBooks] = useState([]);
     const [isPaid, setIsPaid] = useState(false);
+    const navigate = useNavigate();
 
     const onAddBook = () => {
         if (displayBookList.some(book => book.code === bookCode)) {
@@ -90,10 +91,12 @@ export function CreatePayment() {
             billDetails: bookList
         };
         try {
-            await axios.post('http://localhost:8080/admin/resource/bill/confirm', payload, {
+            const response = await axios.post('http://localhost:8080/admin/resource/bill/confirm', payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            alert('Payment created successfully!');
+            alert('Payment created successfully!' );
+            // console.log(response.data);
+            navigate(`/admin/resource/bill/${response.data}`);
         } catch (err) {
             alert('Error creating payment!');
         }
@@ -187,7 +190,17 @@ export function CreatePayment() {
                                            </table>
                                        </div>
                                    </Form.Group>
-                                   <div className="form-check my-3">
+                                   <div className="form-check my-3 d-flex align-items-center">
+                                       <div className="me-3 d-flex align-items-center">
+                                           <span className="me-2 fw-bold">Total Amount:</span>
+                                           <Form.Control
+                                               type="text"
+                                               value={displayBookList.reduce((sum, book) => sum + (book.price * book.quantity), 0).toLocaleString()}
+                                               readOnly
+                                               style={{ width: '150px', fontWeight: 'bold', background: '#f8f9fa' }}
+                                               aria-label="Total Amount"
+                                           />
+                                       </div>
                                        <input
                                            className="form-check-input"
                                            type="checkbox"
@@ -195,7 +208,7 @@ export function CreatePayment() {
                                            checked={isPaid}
                                            onChange={e => setIsPaid(e.target.checked)}
                                        />
-                                       <label className="form-check-label" htmlFor="paidCheckbox">
+                                       <label className="form-check-label ms-2" htmlFor="paidCheckbox">
                                            Đã thanh toán
                                        </label>
                                    </div>

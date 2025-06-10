@@ -68,6 +68,12 @@ export function CreateBook() {
     }
 
     const handleSave = (e) => {
+
+        if (inputBook.author_ids.length === 0) {
+            alert("Please add at least one author.");
+            return;
+        }
+
         const formData = new FormData();
         formData.append("bookInfo", new Blob(
             [JSON.stringify(inputBook)],
@@ -266,10 +272,10 @@ export function CreateBook() {
                                                     <Form.Label>Price</Form.Label>
                                                     <Form.Control type="number" name="price" value={inputBook.price} onChange={(e) => {handleChange(e)}} required />
                                                 </Col>
-                                                <Col>
-                                                    <Form.Label>Quantity</Form.Label>
-                                                    <Form.Control type="number" name="quantity" value={inputBook.quantity} onChange={(e) => {handleChange(e)}} required />
-                                                </Col>
+                                                {/*<Col>*/}
+                                                {/*    <Form.Label>Quantity</Form.Label>*/}
+                                                {/*    <Form.Control type="number" name="quantity" value={inputBook.quantity} onChange={(e) => {handleChange(e)}} required />*/}
+                                                {/*</Col>*/}
                                                 <Col>
                                                     <Form.Label>OnSale</Form.Label>
                                                     <Form.Check

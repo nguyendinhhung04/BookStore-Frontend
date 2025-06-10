@@ -5,7 +5,6 @@ import { useParams,useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 
-import AlertConfirm from "react-alert-confirm";
 import "react-alert-confirm/lib/style.css";
 import {useSelector} from "react-redux";
 
@@ -34,18 +33,13 @@ export function UserDetail() {
     }
 
     const handleSubmited = (event) => {
-        // const formData = new FormData();
-        // formData.append("userData", new Blob(
-        //     [JSON.stringify(user)],
-        //     { type: "application/json" }
-        // ));
-        // axios.post("http://localhost:8080/customer/edit", formData)
-        //     .then(function (response) {
-        //         discardData.current = user;
-        //         discardImageRef.current = imgSrc;
-        //         setEnabledModify(false);
-        //     })
-        //     .catch(error => {console.log(error)});
+        axios.post(`http://localhost:8080/user/create`, user, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((res) => {setEnabledModify(false); discardData.current = user;})
+            .catch((err) => {console.log(err)});
     }
 
     const handleDiscarded = (event) => {

@@ -67,9 +67,6 @@ export function DetailBill() {
                                     <p><strong>Ngày thanh toán:</strong> {billData.payment_date ? billData.payment_date : "Chưa thanh toán"}</p>
 
                                 </Col>
-                                <Col md={6}>
-                                    <p><strong>Tổng tiền:</strong> ..... VNĐ</p>
-                                </Col>
                             </Row>
                         </Card.Body>
                     </Card>
@@ -86,29 +83,36 @@ export function DetailBill() {
                             <tr>
                                 <th>STT</th>
                                 <th>Tên sách</th>
-                                <th>Tác giả</th>
                                 <th>Số lượng</th>
                                 <th>Đơn giá</th>
                                 <th>Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Naruto</td>
-                            <td>....</td>
-                            <td>100</td>
-                            <td>100 VNĐ</td>
-                            <td>100 VNĐ</td>
-                        </tr>
+                        {
+                            billData.billDetailsFe && billData.billDetailsFe.map((book, index) => (
+                                <tr key={book.id}>
+                                    <td>{index + 1}</td>
+                                    <td>{book.bookName}</td>
+                                    <td>{book.quantity}</td>
+                                    <td>{book.price} VNĐ</td>
+                                    <td>{book.price * book.quantity} VNĐ</td>
+                                </tr>
+                            ))
+                        }
                             <tr className="fw-bold">
-                                <td colSpan="5" className="text-end">Tổng cộng:</td>
-                                <td>100 VNĐ</td>
+                                <td colSpan="4" className="text-end">Tổng cộng:</td>
+                                <td>{billData.billDetailsFe ? billData.billDetailsFe.reduce((sum, book) => sum + (book.price * book.quantity), 0).toLocaleString() + ' VNĐ' : ''}</td>
                             </tr>
                         </tbody>
                     </Table>
                 </Card.Body>
             </Card>
+            <div className="d-flex justify-content-center mt-4">
+                <button className="btn btn-primary" onClick={() => (console.log("Confirm Payment"))}>
+                    Confirm
+                </button>
+            </div>
         </Container>
     );
 }
