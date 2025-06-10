@@ -8,6 +8,7 @@ const DetailsBook = () => {
     const location = useLocation();
     const { book, eBooks } = location.state;
     const [authorList, setAuthorList] = useState([]);
+    const [publisherName, setPublisherName] = useState(null);
 
     useEffect(() => {
         book?.author_ids.forEach((authorId) => {
@@ -15,7 +16,12 @@ const DetailsBook = () => {
             axios.get(`http://localhost:8080/admin/resource/author/${authorId}`)
                 .then((res) => {setAuthorList(prev => [...prev, res.data]);})
                 .catch((err) => console.error("Error fetching author:", err));
+
+            axios.get(`http://localhost:8080/admin/resource/publisher/${book.publisher_id}`)
+                .then((res) =>{setPublisherName(res.data.name);})
+                .catch((err) => console.error("Error fetching author:", err));
         })
+
     }, []);
 
     if (!book) return <div>Đang tải...</div>;
@@ -34,8 +40,19 @@ const DetailsBook = () => {
                 </b>
                 </div>
                 <div className="price">
-                    <span className="salePrice">{book.price}.000đ</span>
-                    <span className="discount">- {book.discount}%</span>
+                    {book.discount && book.discount > 0 ? (
+                        <>
+                            <span className="salePrice" style={{ color: 'red', fontWeight: 'bold', fontSize: '1.2em' }}>
+                                {Math.round(book.price * (1 - book.discount / 100))}.000đ
+                            </span>
+                            <span className="originalPrice" style={{ textDecoration: 'line-through', color: '#888', marginLeft: 8 }}>
+                                {book.price}.000đ
+                            </span>
+                            <span className="discount" style={{ color: 'green', marginLeft: 8 }}>- {book.discount}%</span>
+                        </>
+                    ) : (
+                        <span className="salePrice">{book.price}.000đ</span>
+                    )}
                 </div>
                 {/*<div className="quantity">*/}
                 {/*  /!*<button>-</button>*!/*/}
@@ -65,7 +82,7 @@ const DetailsBook = () => {
                     <p> Thể loại: {book.category}</p>
                     <p> Ngày xuất bản: {book.publish_date}</p>
                     <p> Dịch giả: {book.translator}</p>
-                    <p> Nhà xuất bản: {book.publisher || "Nhà xuất bản Hà Nội"}</p>
+                    <p> Nhà xuất bản: {publisherName || "Nhà xuất bản Hà Nội"}</p>
                     {/*<p> Số lượng: {book.quantity} quyển</p>*/}
                 </div>
             </div>
@@ -74,3 +91,4 @@ const DetailsBook = () => {
 };
 
 export default DetailsBook;
+

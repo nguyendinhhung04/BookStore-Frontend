@@ -25,6 +25,10 @@ export function Author() {
     return (
 
         <>
+            <div className="text-end">
+                <Button as={Link} to="/admin/resource/author/create" className="btn-primary" > Create Author</Button>
+            </div>
+
             <PrimeDataTable
                 value={authorList}
                 paginator

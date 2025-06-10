@@ -46,7 +46,18 @@ export function Category() {
                         >
                             <img className="container__home--item-image" src={`data:${book.coverImage.imageType};base64,${book.coverImage.data}` || "https://bizweb.dktcdn.net/100/363/455/products/con-duong-tinh-thuc-01.jpg?v=1744625216473"} alt={book.book_name} />
                             <h3 className="container__home--item-title">{book.book_name}</h3>
-                            <p className="container__home--item-price">{book.price}.000 VNĐ</p>
+                            {book.discount && book.discount > 0 ? (
+                                <>
+                                    <p className="container__home--item-price" style={{ color: 'red', fontWeight: 'bold' }}>
+                                        {Math.round(book.price * (1 - book.discount / 100))}.000 VNĐ
+                                    </p>
+                                    <p className="container__home--item-price" style={{ textDecoration: 'line-through', color: '#888', fontSize: '0.95em' }}>
+                                        {book.price}.000 VNĐ
+                                    </p>
+                                </>
+                            ) : (
+                                <p className="container__home--item-price">{book.price}.000 VNĐ</p>
+                            )}
                         </div>
                     ))}
                 </div>
