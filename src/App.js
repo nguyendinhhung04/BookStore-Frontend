@@ -41,7 +41,6 @@ function App() {
                     <Route path="author" element={<Author />} />
                     <Route path="author/:id" element={<DetailsAuthor />} />
                     <Route path="category" element={<Category/>}/>
-                    {/*<Route path="ebooks" element={<EBooks/>}/>*/}
                 </Route>
                 <Route path="/admin/login" element={<Login/>} />
                 <Route path="/admin/" element={
